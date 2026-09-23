@@ -16,18 +16,9 @@ azure_devops_agent_name: "{{ ansible_hostname }}"
 azure_devops_agent_dir: "/opt/azagent"
 azure_devops_agent_user: "azagent"
 
-# Dependencies to install (set to true to enable) and their versions
-azure_devops_install_dotnet: false
-azure_devops_dotnet_version: "8.0"
-
-azure_devops_install_java: false
-azure_devops_java_version: "17"
-
-azure_devops_install_node: false
-azure_devops_node_version: "20.x"
-
-azure_devops_install_php: false
-azure_devops_php_version: "8.2"
+# Toolset dependencies (e.g. dotnet, java, node, php)
+# To add new toolsets later, just add a corresponding .yml file in the tasks/ directory
+azure_devops_dependencies: []
 ```
 
 ## Example Playbook
@@ -40,13 +31,19 @@ azure_devops_php_version: "8.2"
     azure_devops_pat: "my-secret-pat"
     azure_devops_agent_pool: "MyCustomPool"
     
-    # Enable Node and set a custom version
-    azure_devops_install_node: true
-    azure_devops_node_version: "18.x"
-    
-    # Enable PHP and set a custom version
-    azure_devops_install_php: true
-    azure_devops_php_version: "8.1"
+    # Dynamically provide any dependencies to install
+    azure_devops_dependencies:
+      - name: node
+        versions:
+          - "18.x"
+          - "20.x"
+      - name: php
+        versions:
+          - "8.1"
+          - "8.2"
+      - name: dotnet
+        versions:
+          - "8.0"
   roles:
     - azure-devops-agent
 ```

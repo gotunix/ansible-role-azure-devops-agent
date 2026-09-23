@@ -18,18 +18,15 @@
     state: present
   become: yes
 
-- name: Install .NET
-  ansible.builtin.include_tasks: dotnet.yml
-  when: azure_devops_install_dotnet | bool
+- name: Install custom user-defined packages
+  ansible.builtin.package:
+    name: "{{ azure_devops_custom_packages }}"
+    state: present
+  become: yes
+  when: azure_devops_custom_packages | length > 0
 
-- name: Install Java
-  ansible.builtin.include_tasks: java.yml
-  when: azure_devops_install_java | bool
-
-- name: Install Node.js
-  ansible.builtin.include_tasks: node.yml
-  when: azure_devops_install_node | bool
-
-- name: Install PHP
-  ansible.builtin.include_tasks: php.yml
-  when: azure_devops_install_php | bool
+- name: Install toolset dependencies dynamically
+  ansible.builtin.include_tasks: "{{ tool.name }}.yml"
+  loop: "{{ azure_devops_dependencies | default([]) }}"
+  loop_control:
+    loop_var: tool

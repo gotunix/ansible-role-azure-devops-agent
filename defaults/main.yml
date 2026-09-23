@@ -10,15 +10,6 @@ azure_devops_agent_name: "{{ ansible_hostname }}"
 azure_devops_agent_dir: "/opt/azagent"
 azure_devops_agent_user: "azagent"
 
-# Dependencies to install
-azure_devops_install_dotnet: false
-azure_devops_dotnet_version: "8.0"
-
-azure_devops_install_java: false
-azure_devops_java_version: "17"
-
-azure_devops_install_node: false
-azure_devops_node_version: "20.x"
-
-azure_devops_install_php: false
-azure_devops_php_version: "8.2"
+# Toolset dependencies (e.g. dotnet, java, node, php)
+# To add new toolsets later, just add a corresponding .yml file in the tasks/ directory
+azure_devops_dependencies: []

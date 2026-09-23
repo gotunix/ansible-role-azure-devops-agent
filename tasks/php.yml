@@ -9,23 +9,25 @@
 - name: Install PHP (Debian/Ubuntu)
   ansible.builtin.apt:
     name: 
-      - "php{{ azure_devops_php_version }}"
-      - "php{{ azure_devops_php_version }}-cli"
-      - "php{{ azure_devops_php_version }}-curl"
-      - "php{{ azure_devops_php_version }}-xml"
-      - "php{{ azure_devops_php_version }}-mbstring"
+      - "php{{ item }}"
+      - "php{{ item }}-cli"
+      - "php{{ item }}-curl"
+      - "php{{ item }}-xml"
+      - "php{{ item }}-mbstring"
     state: present
+  loop: "{{ tool.versions | default([]) }}"
   become: yes
   when: ansible_os_family == 'Debian'
 
 - name: Install PHP (RedHat/CentOS)
   ansible.builtin.yum:
     name: 
-      - "php-{{ azure_devops_php_version }}*"
-      - "php-cli-{{ azure_devops_php_version }}*"
-      - "php-curl-{{ azure_devops_php_version }}*"
-      - "php-xml-{{ azure_devops_php_version }}*"
-      - "php-mbstring-{{ azure_devops_php_version }}*"
+      - "php-{{ item }}*"
+      - "php-cli-{{ item }}*"
+      - "php-curl-{{ item }}*"
+      - "php-xml-{{ item }}*"
+      - "php-mbstring-{{ item }}*"
     state: present
+  loop: "{{ tool.versions | default([]) }}"
   become: yes
   when: ansible_os_family == 'RedHat'
