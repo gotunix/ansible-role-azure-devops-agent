@@ -31,19 +31,12 @@ azure_devops_dependencies: []
     azure_devops_pat: "my-secret-pat"
     azure_devops_agent_pool: "MyCustomPool"
     
-    # Dynamically provide any dependencies to install
+    # Dynamically provide any dependencies to install (exact OS package names)
     azure_devops_dependencies:
-      - name: node
-        versions:
-          - "18.x"
-          - "20.x"
-      - name: php
-        versions:
-          - "8.1"
-          - "8.2"
-      - name: dotnet
-        versions:
-          - "8.0"
+      - nodejs
+      - php8.2
+      - dotnet-sdk-8.0
+      - openjdk-17-jdk
   roles:
     - azure-devops-agent
 ```

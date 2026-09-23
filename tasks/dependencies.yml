@@ -25,8 +25,9 @@
   become: yes
   when: azure_devops_custom_packages | length > 0
 
-- name: Install toolset dependencies dynamically
-  ansible.builtin.include_tasks: "{{ tool.name }}.yml"
-  loop: "{{ azure_devops_dependencies | default([]) }}"
-  loop_control:
-    loop_var: tool
+- name: Install dynamic toolset dependencies
+  ansible.builtin.package:
+    name: "{{ azure_devops_dependencies }}"
+    state: present
+  become: yes
+  when: azure_devops_dependencies | length > 0
