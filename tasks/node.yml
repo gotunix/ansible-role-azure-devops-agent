@@ -1,0 +1,24 @@
+---
+- name: Add NodeSource repository (Debian/Ubuntu)
+  ansible.builtin.shell: curl -fsSL https://deb.nodesource.com/setup_{{ azure_devops_node_version }} | bash -
+  become: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install Node.js (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+  become: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Add NodeSource repository (RedHat/CentOS)
+  ansible.builtin.shell: curl -fsSL https://rpm.nodesource.com/setup_{{ azure_devops_node_version }} | bash -
+  become: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Install Node.js (RedHat/CentOS)
+  ansible.builtin.yum:
+    name: nodejs
+    state: present
+  become: yes
+  when: ansible_os_family == 'RedHat'

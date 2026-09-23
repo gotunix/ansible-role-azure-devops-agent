@@ -1,0 +1,31 @@
+---
+- name: Add Ondrej PHP PPA (Debian/Ubuntu)
+  ansible.builtin.apt_repository:
+    repo: "ppa:ondrej/php"
+    state: present
+  become: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install PHP (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: 
+      - "php{{ azure_devops_php_version }}"
+      - "php{{ azure_devops_php_version }}-cli"
+      - "php{{ azure_devops_php_version }}-curl"
+      - "php{{ azure_devops_php_version }}-xml"
+      - "php{{ azure_devops_php_version }}-mbstring"
+    state: present
+  become: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install PHP (RedHat/CentOS)
+  ansible.builtin.yum:
+    name: 
+      - "php-{{ azure_devops_php_version }}*"
+      - "php-cli-{{ azure_devops_php_version }}*"
+      - "php-curl-{{ azure_devops_php_version }}*"
+      - "php-xml-{{ azure_devops_php_version }}*"
+      - "php-mbstring-{{ azure_devops_php_version }}*"
+    state: present
+  become: yes
+  when: ansible_os_family == 'RedHat'

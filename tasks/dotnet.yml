@@ -1,0 +1,14 @@
+---
+- name: Install .NET Core SDK (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: "dotnet-sdk-{{ azure_devops_dotnet_version }}"
+    state: present
+  become: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install .NET Core SDK (RedHat/CentOS)
+  ansible.builtin.yum:
+    name: "dotnet-sdk-{{ azure_devops_dotnet_version }}"
+    state: present
+  become: yes
+  when: ansible_os_family == 'RedHat'

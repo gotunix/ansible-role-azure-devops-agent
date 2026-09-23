@@ -1,0 +1,66 @@
+---
+- name: Ensure agent user exists
+  ansible.builtin.user:
+    name: "{{ azure_devops_agent_user }}"
+    state: present
+    create_home: yes
+  become: yes
+
+- name: Create agent directory
+  ansible.builtin.file:
+    path: "{{ azure_devops_agent_dir }}"
+    state: directory
+    owner: "{{ azure_devops_agent_user }}"
+    group: "{{ azure_devops_agent_user }}"
+    mode: '0755'
+  become: yes
+
+- name: Download Azure DevOps agent
+  ansible.builtin.get_url:
+    url: "{{ azure_devops_agent_url }}"
+    dest: "/tmp/vsts-agent.tar.gz"
+  become: yes
+  become_user: "{{ azure_devops_agent_user }}"
+
+- name: Extract agent
+  ansible.builtin.unarchive:
+    src: "/tmp/vsts-agent.tar.gz"
+    dest: "{{ azure_devops_agent_dir }}"
+    remote_src: yes
+    creates: "{{ azure_devops_agent_dir }}/config.sh"
+  become: yes
+  become_user: "{{ azure_devops_agent_user }}"
+
+- name: Check if agent is already configured
+  ansible.builtin.stat:
+    path: "{{ azure_devops_agent_dir }}/.agent"
+  register: agent_configured
+
+- name: Configure agent
+  ansible.builtin.command: >
+    ./config.sh --unattended 
+    --url "{{ azure_devops_server_url }}" 
+    --auth pat --token "{{ azure_devops_pat }}" 
+    --pool "{{ azure_devops_agent_pool }}" 
+    --agent "{{ azure_devops_agent_name }}" 
+    --acceptTeeEula 
+    --replace
+  args:
+    chdir: "{{ azure_devops_agent_dir }}"
+  become: yes
+  become_user: "{{ azure_devops_agent_user }}"
+  when: not agent_configured.stat.exists and azure_devops_pat != ""
+
+- name: Install agent as a service
+  ansible.builtin.command: ./svc.sh install "{{ azure_devops_agent_user }}"
+  args:
+    chdir: "{{ azure_devops_agent_dir }}"
+  become: yes
+  when: not agent_configured.stat.exists and azure_devops_pat != ""
+
+- name: Start agent service
+  ansible.builtin.command: ./svc.sh start
+  args:
+    chdir: "{{ azure_devops_agent_dir }}"
+  become: yes
+  when: not agent_configured.stat.exists and azure_devops_pat != ""

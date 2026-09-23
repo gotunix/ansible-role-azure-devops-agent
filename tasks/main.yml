@@ -1,0 +1,8 @@
+---
+# tasks file for azure-devops-agent
+
+- name: Include dependency tasks
+  ansible.builtin.include_tasks: dependencies.yml
+
+- name: Include agent installation tasks
+  ansible.builtin.include_tasks: agent.yml

@@ -1,0 +1,24 @@
+---
+# defaults file for azure-devops-agent
+
+# Agent Configuration
+azure_devops_agent_url: "https://vstsagentpackage.azureedge.net/agent/3.243.1/vsts-agent-linux-x64-3.243.1.tar.gz"
+azure_devops_server_url: "https://dev.azure.com/your-organization"
+azure_devops_pat: ""
+azure_devops_agent_pool: "Default"
+azure_devops_agent_name: "{{ ansible_hostname }}"
+azure_devops_agent_dir: "/opt/azagent"
+azure_devops_agent_user: "azagent"
+
+# Dependencies to install
+azure_devops_install_dotnet: false
+azure_devops_dotnet_version: "8.0"
+
+azure_devops_install_java: false
+azure_devops_java_version: "17"
+
+azure_devops_install_node: false
+azure_devops_node_version: "20.x"
+
+azure_devops_install_php: false
+azure_devops_php_version: "8.2"

@@ -1,0 +1,35 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+  become: yes
+
+- name: Install general prerequisites
+  ansible.builtin.package:
+    name:
+      - curl
+      - git
+      - jq
+      - unzip
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+    state: present
+  become: yes
+
+- name: Install .NET
+  ansible.builtin.include_tasks: dotnet.yml
+  when: azure_devops_install_dotnet | bool
+
+- name: Install Java
+  ansible.builtin.include_tasks: java.yml
+  when: azure_devops_install_java | bool
+
+- name: Install Node.js
+  ansible.builtin.include_tasks: node.yml
+  when: azure_devops_install_node | bool
+
+- name: Install PHP
+  ansible.builtin.include_tasks: php.yml
+  when: azure_devops_install_php | bool

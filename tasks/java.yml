@@ -1,0 +1,14 @@
+---
+- name: Install Java (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: "openjdk-{{ azure_devops_java_version }}-jdk"
+    state: present
+  become: yes
+  when: ansible_os_family == 'Debian'
+
+- name: Install Java (RedHat/CentOS)
+  ansible.builtin.yum:
+    name: "java-{{ azure_devops_java_version }}-openjdk-devel"
+    state: present
+  become: yes
+  when: ansible_os_family == 'RedHat'
