@@ -2,7 +2,7 @@
 # defaults file for azure-devops-agent
 
 # Agent Configuration
-azure_devops_agent_url: "https://vstsagentpackage.azureedge.net/agent/3.243.1/vsts-agent-linux-x64-3.243.1.tar.gz"
+azure_devops_agent_url: "https://download.agent.dev.azure.com/agent/3.243.1/vsts-agent-linux-x64-3.243.1.tar.gz"
 azure_devops_server_url: "https://dev.azure.com/your-organization"
 azure_devops_pat: ""
 azure_devops_agent_pool: "Default"
