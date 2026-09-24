@@ -5,18 +5,25 @@
   when: ansible_os_family == 'Debian'
   become: yes
 
-- name: Install general prerequisites
+- name: Install common prerequisites
   ansible.builtin.package:
     name:
       - curl
       - git
       - jq
       - unzip
-      - apt-transport-https
       - ca-certificates
+    state: present
+  become: yes
+
+- name: Install Debian-specific prerequisites
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
       - software-properties-common
     state: present
   become: yes
+  when: ansible_os_family == 'Debian'
 
 - name: Install custom user-defined packages
   ansible.builtin.package:
