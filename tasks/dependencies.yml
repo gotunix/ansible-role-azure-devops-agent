@@ -25,16 +25,9 @@
   become: yes
   when: ansible_os_family == 'Debian'
 
-- name: Install custom user-defined packages
-  ansible.builtin.package:
-    name: "{{ azure_devops_custom_packages }}"
-    state: present
-  become: yes
-  when: azure_devops_custom_packages | length > 0
-
 - name: Install dynamic toolset dependencies
   ansible.builtin.package:
     name: "{{ azure_devops_dependencies }}"
     state: present
   become: yes
-  when: azure_devops_dependencies | length > 0
+  when: azure_devops_dependencies is defined and azure_devops_dependencies | length > 0
